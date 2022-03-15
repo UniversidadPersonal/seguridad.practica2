@@ -9,23 +9,44 @@ class AES_CIPHER_CBC:
 
     def __init__(self, key):
         """Inicializa las variables locales"""
+        self.key = key
+
 
     def cifrar(self, cadena, IV):
         """Cifra el parámetro cadena (de tipo String) con una IV específica, y 
            devuelve el texto cifrado binario"""
-        return None
+        data = cadena.encode("utf-8")
+
+        cipherAES = AES.new(key, AES.MODE_CBC, IV)
+        cyphertext = cipherAES.encrypt(pad(data,self.BLOCK_SIZE_AES))
+        return cyphertext
 
     def descifrar(self, cifrado, IV):
         """Descifra el parámetro cifrado (de tipo binario) con una IV específica, y 
            devuelve la cadena en claro de tipo String"""
-        return None
+        decipherAES = AES.new(key, AES.MODE_CBC, IV)
+        decyphertext = unpad(decipherAES.decrypt(cifrado), self.BLOCK_SIZE_AES).decode("utf-8", "ignote")
+        return decyphertext
 
 key = get_random_bytes(16) # Clave aleatoria de 128 bits
 IV = get_random_bytes(16)  # IV aleatorio de 128 bits
 datos = "Hola Mundo con AES en modo CBC"
 d = AES_CIPHER_CBC(key)
+print('----AES-CYPHER-CBC----')
+print(f' - Texto claro          - {datos}')
+
+
 cifrado = d.cifrar(datos, IV)
+
+print(f' - Texto cifrado        - {cifrado}')
+
+
 descifrado = d.descifrar(cifrado, IV)
+
+print(f' - Texto descifrado     - {descifrado}')
+
+
+print('')
 
 ############################
 ############################
